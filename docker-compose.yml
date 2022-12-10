@@ -1,0 +1,13 @@
+ version: "3.7"
+
+ services:
+   docker-ckpool:
+     image: docker-ckpool
+     ports:
+       - 3333:3333
+     extra_hosts:
+       - ckpool.local:host-gateway
+     volumes:
+       - ${PWD}/conf:/srv/ckpool/conf
+       - ${PWD}/logs:/srv/ckpool/logs
+     restart: unless-stopped
