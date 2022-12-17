@@ -3,7 +3,7 @@ FROM debian:11-slim
 
 ARG REPO=ckpool-solo
 ARG BRANCH=solobtc
-ARG REPO_URL=https://github.com/golden-guy/${REPO}/archive/refs/heads/${BRANCH}.zip
+ARG REPO_URL=https://github.com/golden-guy/${REPO}.git
 
 ENV BUILD_DIR=/var/build
 ENV BIN_DIR=/srv/ckpool
@@ -17,15 +17,15 @@ RUN groupadd --gid ${USER_GID} ${USER_NAME} \
     && useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USER_NAME}
 
 # install required packages
-RUN apt-get update && apt-get install -y autoconf automake libtool build-essential yasm libzmq3-dev libcap2-bin curl unzip
+RUN apt-get update && apt-get install -y autoconf automake libtool build-essential git yasm libzmq3-dev libcap2-bin
 
 # fetch sources from github
-RUN curl -o /tmp/${REPO}.zip -L ${REPO_URL} \
-    && unzip -q /tmp/${REPO}.zip -d ${BUILD_DIR}/ \
-    && rm -f /tmp/${REPO}.zip
+WORKDIR ${BUILD_DIR}
+RUN git clone ${REPO_URL}
 
 # build ckpool-solo sources
-WORKDIR ${BUILD_DIR}/${REPO}-${BRANCH}
+WORKDIR ${BUILD_DIR}/${REPO}
+RUN git checkout ${BRANCH}
 RUN ./autogen.sh && ./configure --prefix=${BIN_DIR}
 RUN make
 
