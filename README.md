@@ -28,8 +28,21 @@ To make a local bitcoind available to the docker container, add these two lines 
 
 ### Container quick-start
 
-Create and start the container with `docker compose up -d`
+- Create and start the container with `docker compose up -d`
 
 - To stop the container use `docker compose stop`
 - To start the container use `docker compose start`
-- Whenever you need to change the ckpool conf, stop the container first. Once done with your changes, start the container again.
+
+- Whenever you need to change the ckpool configuration, stop the container first. Once done with your changes, start the container again.
+
+- To destroy the container (if needed), use `docker compose down`
+
+### Connect to ckpool
+
+By default, the ckpool container is listening on port 3333. Depending on your setup, either use localhost or the IP address of the docker host in the stratum URL to connect your miners:
+
+`stratum+tcp://localhost:3333`
+
+OR
+
+`stratum+tcp://<HOST_IP>:3333`
